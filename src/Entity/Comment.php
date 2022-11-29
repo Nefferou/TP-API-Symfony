@@ -3,12 +3,26 @@
 namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Link;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Post;
 use App\Repository\CommentRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: CommentRepository::class)]
 #[ApiResource]
+#[ApiResource(
+    uriTemplate: '/articles/{id}/comments',
+    uriVariables: [
+        'id' => new Link(
+            fromClass: Article::class,
+            fromProperty: 'comments'
+        )
+        ],
+        operations: [new GetCollection(), new Post()]
+)]
 class Comment
 {
     #[ORM\Id]
